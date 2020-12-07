@@ -1,0 +1,32 @@
+package com.example.demo.secure;
+
+import org.eclipse.microprofile.jwt.Claim;
+import org.eclipse.microprofile.jwt.ClaimValue;
+
+import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import java.security.Principal;
+
+/**
+ *
+ */
+@Path("/protected")
+@RequestScoped
+public class ProtectedController {
+
+    @Inject
+    @Claim("custom-value")
+    private ClaimValue<String> custom;
+
+    @Inject
+    private Principal principal;
+
+    @GET
+    @RolesAllowed("protected")
+    public String getJWTBasedValue() {
+        return "Protected Resource; Custom value : " + custom.getValue() + "; principal: " + principal.getName();
+    }
+}
